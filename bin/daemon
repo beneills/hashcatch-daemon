@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'trollop'
+
+# require daemon relative library
+file = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
+lib = File.join File.dirname(file), "/../lib/daemon"
+require lib
+
+# require rails env TODO
+#require File.expand_path('../../../site/config/environment',  __FILE__)
+
+opts = Trollop::options do
+  opt :quiet, "Use minimal output", :short => 'q'
+  opt :interactive, "Be interactive"
+  opt :filename, "File to process", :type => String
+end
+
+
+d = Daemon::Daemon.new(Entry.method(:higher_level_create))
+#d = Daemon::Daemon.new(Entry.create)
+d.run
+
+#(place: 2, text: "Thriller", link: "", category_id: 2, user_id: 5))
