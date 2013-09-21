@@ -9,6 +9,7 @@ module Daemon
     def parse
       r = text.match(Configuration::STATUS_REGEX)
       raise "Status parsing error: no regex match" unless r
+#      Update.new(r[:category], r[:number], r[:name], "TestUser") # user.username) TODO
       Update.new(r[:category], r[:number], r[:name], user.username)
     end
   end

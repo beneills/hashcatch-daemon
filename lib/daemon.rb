@@ -17,7 +17,7 @@ module Daemon
 
     def configure_api
       TweetStream.configure do |config|
-        config.consumer_key       = 'X5sbEkdNPXBbd2c8hqog'
+        config.consumer_key       = 'X5sbEkdNPXBbd2c8hqog' # TODO
         config.consumer_secret    = 'bPeAmHaUdH4J5mY8n9NpGvcvtlCxIuUrcXSvJjkc'
         config.oauth_token        = '460113372-uNucdi2XaWwmVeAxyTNSEb0z0qXRFOfaylg7ECLj'
         config.oauth_token_secret = 'xFrY9FSPca0cCFjAxKDk3mGGHyJI94MXac0a1y5pBI'
