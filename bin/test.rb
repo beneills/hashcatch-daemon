@@ -44,7 +44,9 @@ end
 
 
 statuses = ["my #2 book is Kim #toptest",
-            "#toptest #1 film Gladiator"].map { |t|
+            "#toptest #1 film Gladiator",
+            "#toptest an example",
+            "hi world"].map { |t|
   Twitter::Status.new(id: 0, text: t)
 }
 

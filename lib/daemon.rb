@@ -4,6 +4,11 @@ Dir["#{File.join(File.dirname(__FILE__), "daemon")}/*.rb"].each do |lib|
   require lib
 end
 
+# require applications
+Dir["#{File.join(File.dirname(__FILE__), "applications")}/*.rb"].each do |application|
+  require application
+end
+
 
 module Daemon
   class Daemon
@@ -12,6 +17,7 @@ module Daemon
     def initialize(handler)
       @handler = handler
       @users = Hash.new { |h, k| h[k] = User.new(k) }
+      @applications = APPLICATIONS.map { |ac| ac.new }
       configure_api
     end
 
@@ -26,10 +32,7 @@ module Daemon
     end
 
     def run
-      # This will pull a sample of all tweets based on
-      # your Twitter account's Streaming API role.
       TweetStream::Client.new.track(Configuration::HASHTAG) do |status|
-        puts "RECV"
         handle_status(status)
       end
     end
@@ -44,14 +47,11 @@ module Daemon
     end
 
     def handle_status(status)
-      return unless status.top3_hashtag?
-#      begin
-      update = status.parse
-      handle_update(update)
-#      rescue
-#        puts "could not parse" # TODO
-#        raise
-#      end
+      return unless status.top3_hashtag? # TODO necessary?
+
+      @applications.each do |a|
+        break if a.handle(status)
+      end
     end
   end
 end
