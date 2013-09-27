@@ -14,9 +14,7 @@ module Daemon
   class Daemon
     attr_accessor :users
 
-    def initialize(handler)
-      @handler = handler
-      @users = Hash.new { |h, k| h[k] = User.new(k) }
+    def initialize # 
       @applications = APPLICATIONS.map { |ac| ac.new }
       configure_api
     end
@@ -32,26 +30,20 @@ module Daemon
     end
 
     def run
-      TweetStream::Client.new.track(Configuration::HASHTAG) do |status|
+      TweetStream::Client.new.track(*Configuration::HASHTAGS) do |status|
         handle_status(status)
       end
-    end
-
-    def handle_update(update)
-      puts "Handling update"
-      users[update.username].update(update)
-      puts "Calling #{@handler}"
-      @handler.call(update.to_h)
-      puts "called"
-      puts users # TODO
     end
 
     def handle_status(status)
       return unless status.top3_hashtag? # TODO necessary?
 
       @applications.each do |a|
-        break if a.handle(status)
+        break if a.handle(status, status.user)
       end
+      # users[update.username].update(update)
+      # puts "Calling #{@handler}"
+      # @handler.call(update.to_h)
     end
   end
 end

@@ -17,7 +17,7 @@ opts = Trollop::options do
 end
 
 
-d = Daemon::Daemon.new(Entry.method(:higher_level_create))
+d = Daemon::Daemon.new
 #d = Daemon::Daemon.new(Entry.create)
 d.run
 

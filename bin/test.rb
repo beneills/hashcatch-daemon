@@ -43,12 +43,15 @@ def test_user
 end
 
 
-statuses = ["my #2 book is Kim #toptest",
-            "#toptest #1 film Gladiator",
-            "#toptest an example",
+statuses = ["my #2 book is Kim #hashcatch",
+            "#hashcatch #1 film Gladiator",
+            "#hashcatch hello world4",
+            "#hashcatch Hello World5",
+            "#hashcatch an example",
             "hi world"].map { |t|
   Twitter::Status.new(id: 0, text: t)
 }
 
-d = Daemon::Daemon.new(Proc.new{|u| puts u})
+Daemon::Configuration::TEST = true
+d = Daemon::Daemon.new
 statuses.each { |s| d.handle_status(s) }

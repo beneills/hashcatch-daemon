@@ -11,7 +11,7 @@ module Daemon
 
     # Log to file, if possible
     #
-    def handle(status)
+    def handle(status, user)
       if status.text.include?(@@keyword)
         File.open(@@logfile, 'a') { |file|
           file.write("Handled status: #{status.text}\n")
@@ -23,5 +23,5 @@ module Daemon
     end
   end
 
-  Daemon::Application.register_application(ExampleApplication)
+ # Daemon::Application.register_application(ExampleApplication)
 end
