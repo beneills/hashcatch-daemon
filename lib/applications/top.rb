@@ -21,11 +21,10 @@ module Daemon
 
 
       def to_h
-       {:username => @username,
-         :category => @category,
-         :place => @number,
-         :text => @name,
-         :link => ""}
+        {:category => @category,
+          :place => @number,
+          :text => @name,
+          :link => ""}
      end
 
       def validate_category(synonym)
@@ -63,7 +62,7 @@ module Daemon
         update = TopUpdate.new(match[:category], match[:number], match[:name], user.username)
         rails(update) do |update|
           puts "user.rails.entries.create(#{update.to_h})"
-          user.rails.entries.create(update.to_h)
+          user.rails.top_entries.create(update.to_h)
         end
       end
     end

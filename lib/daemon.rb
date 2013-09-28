@@ -14,22 +14,7 @@ module Daemon
   class Daemon
     attr_accessor :users
 
-    def initialize # 
-#      class TUser < Struct.new(:username); end
-      user = DaemonUser.new(Struct.new(:username).new('james'))
-      puts user.rails
-      puts user.rails.class
-#      puts user.methods
-#      puts (user.rails.methods - Object.new.methods).sort
-#      puts user.rails.username
-      h = {:username => user.rails.username,
-        :category => 'book',
-        :place => '3',
-        :text => 'hobbit',
-        :link => ""}
-      user.rails.entries.create(h)
-      exit 1
-
+    def initialize
       @applications = APPLICATIONS.map { |ac| ac.new }
       configure_api
     end
