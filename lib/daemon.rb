@@ -38,12 +38,17 @@ module Daemon
     def handle_status(status)
       return unless status.top3_hashtag? # TODO necessary?
 
-      @applications.each do |a|
-        break if a.handle(status, status.user)
+      user = User.new(status.user)
+
+      handler = @applications.find do |a|
+        a.handle(status, user)
       end
-      # users[update.username].update(update)
-      # puts "Calling #{@handler}"
-      # @handler.call(update.to_h)
+
+      if handler.nil?
+        puts "No handler!"
+      else
+        puts "Handled by #{handler}"
+      end
     end
   end
 end

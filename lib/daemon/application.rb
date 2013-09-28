@@ -19,16 +19,24 @@ module Daemon
     # run the block only if we are connected to Rails
     #
     def rails(*args, &block)
-      if Configuration::TEST
-        puts('Pretend rails: ' + args.map { |a| a.inspect }.join(', '))
-      else
-        puts "Real DB!" # TODO
-        #db_method.call(*args)
-        #block.call(*args) unless Configuration::TEST
-      end
+      self.class.rails(*args, &block)
     end
 
     class << self
+      # run the block only if we are connected to Rails TODO
+      #
+      def rails(*args, &block)
+        if Configuration::TEST
+          puts('Pretend rails: ' + args.map { |a| a.inspect }.join(', '))
+          nil
+        else
+          puts "Real DB!" # TODO
+          #db_method.call(*args)
+          #block.call(*args) unless Configuration::TEST
+          # return
+        end
+      end
+
       # Must be called to enable an application
       #
       def register_application(application)

@@ -12,16 +12,16 @@ module Daemon
     class TopUpdate
       attr_accessor :category, :number, :name, :username
 
-      def initialize(category_synonym, number, name, user)
+      def initialize(category_synonym, number, name, username)
         @category = validate_category(category_synonym)
         @number = validate_number(number)
         @name = validate_name(name)
-        @user = user
+        @username = username
       end
 
 
       def to_h
-       {:username => @user.username,
+       {:username => @username,
          :category => @category,
          :place => @number,
          :text => @name,
@@ -59,8 +59,10 @@ module Daemon
       end
 
       def handle_match(status, user, match)
-        update = TopUpdate.new(match[:category], match[:number], match[:name], user)
-        rails(update) { |u| Entry.higher_level_create(u.to_h) }
+        update = TopUpdate.new(match[:category], match[:number], match[:name], user.username)
+        rails(update) do |update|
+          user.rails.entries.create(update.to_h)
+        end
       end
     end
 
