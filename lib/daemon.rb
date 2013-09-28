@@ -1,3 +1,4 @@
+require 'readline'
 require 'tweetstream'
 
 Dir["#{File.join(File.dirname(__FILE__), "daemon")}/*.rb"].each do |lib|
@@ -36,9 +37,17 @@ module Daemon
       end
     end
 
+    def manual_run
+      puts "Daemon manually running. #hc automatically appended."
+      while tweet = Readline.readline("> ", true).concat(' #hc')
+        puts "<#{tweet}>"
+        handle_status(TestStatus.new(tweet))
+      end
+    end
+
     def handle_status(status)
       puts "handle_status(#{status.text})"
-      return unless status.top3_hashtag? # TODO necessary?
+#      return unless status.top3_hashtag? # TODO necessary?
 
       user = DaemonUser.new(status.user)
 
