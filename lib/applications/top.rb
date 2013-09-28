@@ -59,8 +59,10 @@ module Daemon
       end
 
       def handle_match(status, user, match)
+        puts "top handle_match()"
         update = TopUpdate.new(match[:category], match[:number], match[:name], user.username)
         rails(update) do |update|
+          puts "user.rails.entries.create(#{update.to_h})"
           user.rails.entries.create(update.to_h)
         end
       end

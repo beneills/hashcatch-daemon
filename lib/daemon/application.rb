@@ -32,7 +32,7 @@ module Daemon
         else
           puts "Real DB!" # TODO
           #db_method.call(*args)
-          #block.call(*args) unless Configuration::TEST
+          block.call(*args)
           # return
         end
       end
