@@ -30,28 +30,26 @@ module Daemon
     end
 
     def run
-      puts "run()"
+      puts "Daemon running."
       TweetStream::Client.new.track(*Configuration::HASHTAGS) do |status|
         handle_status(status)
       end
     end
 
     def handle_status(status)
-      puts "handle_status()"
+      puts "handle_status(#{status.text})"
       return unless status.top3_hashtag? # TODO necessary?
 
-      puts "getting user"
       user = DaemonUser.new(status.user)
-      puts "user = #{user}"
 
       handler = @applications.find do |a|
         a.handle(status, user)
       end
 
       if handler.nil?
-        puts "No handler!"
+        puts "  No handler!"
       else
-        puts "Handled by #{handler}"
+        puts "  Handled by #{handler}"
       end
     end
   end

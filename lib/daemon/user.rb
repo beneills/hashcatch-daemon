@@ -12,19 +12,11 @@ module Daemon
     end
 
     def get_user(username)
-      puts "get_user()"
       Application.rails(username) do |username|
-        puts "calling rails:user.find_...(#{username})"
-#        puts (Rails::User.methods - Object.methods)
         u = User.find_by_username(username)
-        puts "found user: #{u}"
         if u.nil?
-          puts "u == nil"
-          u = User.new(username: username)
-          u.save # TODO
+          u = User.create(username: username)
         end
-        puts "Return #{u}"
-        puts #{u.username}"
         u
       end
     end

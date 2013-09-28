@@ -30,10 +30,7 @@ module Daemon
           puts('Pretend rails: ' + args.map { |a| a.inspect }.join(', '))
           nil
         else
-          puts "Real DB!" # TODO
-          #db_method.call(*args)
           block.call(*args)
-          # return
         end
       end
 
