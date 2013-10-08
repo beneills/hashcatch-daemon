@@ -7,6 +7,8 @@ module Daemon
   #   consumption.
   #
   class Application
+    include Logging
+
     def initialize
     end
 

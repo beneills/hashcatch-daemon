@@ -9,10 +9,11 @@ module Daemon
     $number_regexp = (1..$list_size).to_a.map(&:to_s).join('|')
     $regexp = /(my +)?((no)|#) *(favorite +)?(?<number>#{$number_regexp}) +(?<category>(album)|(cd)|(book)|(film)|(movie)) +(is +)?(?<name>[^#]+)/i
 
-    class TopUpdate
+    class TopUpdate < Update
       attr_accessor :category, :number, :name, :username
 
-      def initialize(category_synonym, number, name, username)
+      def initialize(tweet, category_synonym, number, name, username)
+        @tweet = tweet
         @category = validate_category(category_synonym)
         @number = validate_number(number)
         @name = validate_name(name)
@@ -21,7 +22,8 @@ module Daemon
 
 
       def to_h
-        {:category => @category,
+        {:tweet => @tweet,
+          :category => @category,
           :place => @number,
           :text => @name,
           :link => ""}
@@ -58,7 +60,7 @@ module Daemon
       end
 
       def handle_match(status, user, match)
-        update = TopUpdate.new(match[:category], match[:number], match[:name], user.username)
+        update = TopUpdate.new(status.text, match[:category], match[:number], match[:name], user.username)
         rails(update) do |update|
           user.rails.top_entries.create(update.to_h)
         end

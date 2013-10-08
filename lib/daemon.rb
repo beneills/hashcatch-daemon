@@ -13,9 +13,15 @@ end
 
 module Daemon
   class Daemon
+    include Logging
+
     attr_accessor :users
 
     def initialize
+      # TODO
+      Delayed::Worker.destroy_failed_jobs = false
+
+      logger.info("Intiatialize Daemon")
       @applications = APPLICATIONS.map { |ac| ac.new }
       configure_api
     end
@@ -31,7 +37,7 @@ module Daemon
     end
 
     def run
-      puts "Daemon running."
+      logger.info("Daemon Running")
       TweetStream::Client.new.track(*Configuration::HASHTAGS) do |status|
         handle_status(status)
       end
@@ -46,8 +52,7 @@ module Daemon
     end
 
     def handle_status(status)
-      puts "handle_status(#{status.text})"
-#      return unless status.top3_hashtag? # TODO necessary?
+      logger.info("Handling Status: #{status.text}")
 
       user = DaemonUser.new(status.user)
 
@@ -56,9 +61,9 @@ module Daemon
       end
 
       if handler.nil?
-        puts "  No handler!"
+        logger.info("No handler!")
       else
-        puts "  Handled by #{handler}"
+        logger.info("Handled by: #{handler}")
       end
     end
   end

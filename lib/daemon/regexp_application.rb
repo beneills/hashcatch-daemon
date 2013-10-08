@@ -10,8 +10,10 @@ module Daemon
     def handle(status, user)
       m = @regexp.match(status.text)
       if m.nil?
+        logger.info("No regexp match for: #{self.class}")
         false
       else
+        logger.info("Regexp match for: #{self.class}, handling.")
         handle_match(status, user, m)
         true
       end
