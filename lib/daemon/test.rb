@@ -16,8 +16,8 @@ module Daemon
                                                 false,
                                                 'https://si0.twimg.com/profile_images/1053008011/2010-07-04_Eric_Mueller__2___512x640__bigger.jpg')
 
-    def initialize(text)
-      @user = @@user
+    def initialize(text, user)
+#      @user = @@user
       @text = text
     end
   end
